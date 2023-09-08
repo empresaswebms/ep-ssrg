@@ -1,14 +1,15 @@
 @import 'bootstrap/bootstrap';
 @import 'bootstrap/variables';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
 
-$font-primary: 'Poppins',Arial, sans-serif;
+$font-primary: 'Montserrat',Arial, sans-serif;
 
 $white: #fff;
-$black: #000000;
-$darken: #3a4348;
+$black: #080808;
+$darken: #2e323b;
 
-$primary: #fc983c;
-$secondary: #f7b71d;
+$primary: #001E7A;
+$secondary: #F1CF38;
 
 
 
@@ -282,6 +283,9 @@ h1, h2, h3, h4, h5,
 		.navbar-brand {
 			color: $black;
 		}
+		.btn.btn-outline-white{
+			color:$primary
+		}
 	}
 }
 
@@ -330,6 +334,18 @@ h1, h2, h3, h4, h5,
 		}
 		.slider-text{
 			height: 700px !important;
+		}
+	}
+	&.hero-wrap-3{
+		height: 300px !important;
+		position: relative;
+		.overlay{
+			width: 100%;
+			opacity: .05;
+			height: 300px;
+		}
+		.slider-text{
+			height: 300px !important;
 		}
 	}
 }
@@ -2365,4 +2381,10 @@ textarea.form-control {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px;
   }
+}
+
+.user-avatar {
+	img{
+		border-radius: 50%;
+	}
 }
