@@ -34,16 +34,11 @@
                     <div class="card">
                         <div class="card-body">
                             <finalizado v-if="procesoExitoso === true"></finalizado>
-                            <component v-if="procesoExitoso === false" 
-                                :is="currentStepComponent" @update="updateData"
-                                @volver-paso="setStep" 
-                                :datosFactura="datosFactura" 
-                                :datosEnvio="datosEnvio"
+                            <component v-if="procesoExitoso === false" :is="currentStepComponent" @update="updateData"
+                                @volver-paso="setStep" :datosFactura="datosFactura" :datosEnvio="datosEnvio"
                                 :datosPago="datosPago" />
                             <div class="mt-3" v-if="procesoExitoso === false">
-                                <button class="btn btn-secondary me-4" 
-                                    @click="prevStep" 
-                                    :disabled="currentStep === 0" >
+                                <button class="btn btn-secondary me-4" @click="prevStep" :disabled="currentStep === 0">
                                     Anterior
                                 </button>
 
@@ -52,14 +47,12 @@
                                     disabled>
                                     Siguiente
                                 </button>
-                                <button class="btn btn-primary" 
-                                    @click="nextStep"
+                                <button class="btn btn-primary" @click="nextStep"
                                     v-if="stepComplete[steps[currentStep].id] && (currentStep !== steps.length - 1)">
                                     Siguiente
                                 </button>
 
-                                <button class="btn btn-primary" 
-                                    @click="finishChekout"
+                                <button class="btn btn-primary" @click="finishChekout"
                                     v-if="currentStep === steps.length - 1">
                                     Proceder
                                 </button>
@@ -81,7 +74,7 @@ import { ref, watch, reactive, computed, onBeforeMount, onMounted } from 'vue';
 import Auth from '@/js/firebase/AuthHelper';
 import fetcher from "@/js/web/fetcher"
 import { getDoc, doc } from "firebase/firestore"
-import { getData,  } from '@/js/CartApp/CartPlugin';
+import { getData, vaciarCarrito } from '@/js/CartApp/CartPlugin';
 import ModalAviso from './ModalAviso.vue';
 import DatabaseLocal from '@/js/databaseLocal'
 import Step1 from './Facturacion.vue';
@@ -90,7 +83,7 @@ import Step3 from './MetodoPago.vue';
 import Step4 from './Resumen.vue';
 import Finalizado from './Finalizado.vue';
 
-import bootstrap from 'bootstrap';
+import { Modal } from 'bootstrap';
 
 import { animarElementos, scrollToElement } from "@/js/views/animate"
 
@@ -108,34 +101,13 @@ const procesoExitoso = ref(false);
 
 onBeforeMount(async () =>
 {
-    // getDoc(firestore,doc("usuarios", auth.currentUser.providerId))
-    // .then(snap=>{
-    //     console.log("snap.data()")
-    //     console.log(snap.data())
-    // })
-    // .catch(err => {
-    //     console.log("err")
-    //     console.log(err)
-    // })
-
-    fetcher.getData("datoscliente",
-        { userTokenId: await auth.currentUser.getIdToken(auth) },
-        mostrarData)
-
-
-    datosFactura.value = DatabaseLocal.loadData("factura",
-        {
-            nombre: auth.currentUser.displayName,
-            correo: auth.currentUser.email,
-            telefono: auth.currentUser.phoneNumber,
-        }
-    )
 
     datosEnvio.value = DatabaseLocal.loadData("envio", {})
     datosPago.value = DatabaseLocal.loadData("pago")
 })
-watch(datosFactura, (n)=>{
-    console.log("Datos factura actualizados",JSON.parse(JSON.stringify(n)))
+watch(datosFactura, (n) =>
+{
+    console.log("Datos factura actualizados", JSON.parse(JSON.stringify(n)))
 })
 onMounted(() =>
 {
@@ -183,17 +155,21 @@ const updateData = (data) =>
     {
         case "factura": {
             datosFactura.value = data.data
+            break;
         }
         case "envio": {
             datosEnvio.value = data.data
+            DatabaseLocal.saveData(data.type, data.data);
+            break;
         }
         case "pago": {
             datosPago.value = data.data
+            DatabaseLocal.saveData(data.type, data.data);
+            break;
         }
 
     }
     check(data);
-    DatabaseLocal.saveData(data.type, data.data);
 }
 
 const check = (data) =>
@@ -249,13 +225,14 @@ const finishChekout = async () =>
         {
             console.log(rst);
             procesoExitoso.value = true;
+            vaciarCarrito();
             scrollToElement("pasosCompraTabs")
 
         })
         .catch(rsn =>
         {
             console.log(rsn)
-            new bootstrap.Modal('#aviso', options).show();
+            new Modal('#aviso').show();
         })
 }
 watch(stepComplete, (v) =>

@@ -16,7 +16,7 @@
                                 <option value="" disabled>Seleccionar...</option>
                                 <option value="transferencia">Transferencia o Pago Móvil</option>
                                 <option value="zelle">Zelle</option>
-                                <option value="bancoPanama">Banco en Panamá</option>
+                                <option value="transferencia-panama">Banco en Panamá</option>
                             </select>
                         </div>
                         <!-- Campos específicos de cada opción de pago -->
@@ -49,7 +49,7 @@
                                 required>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" :disabled="enviando " class="btn btn-primary"><i class="bi bi-send"></i> Enviar</button>
                     </form>
                 </div>
             </div>
@@ -73,17 +73,20 @@
 </template>
   
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted , watchEffect} from 'vue';
 import { postData } from '@/js/web/fetcher';
 import Auth from '@/js/firebase/AuthHelper';
+import { Modal } from 'bootstrap';
 const auth = Auth.get();
 
+const enviando = ref(false);
 const selectedPayment = ref('');
 const numReferencia = ref('');
 const fechaTransferencia = ref('');
 const montoTransferencia = ref('');
 const correoZelle = ref('');
 const numRecibo = ref('');
+const valido = ref(false);
 
 const aviso = ref();
 
@@ -106,19 +109,26 @@ const openModal = (asunto, cuerpo) =>
     //  modal.show();
 };
 
+
+
 onMounted(() =>
 {
+    
     selectedPayment.value = '';
     numReferencia.value = '';
     fechaTransferencia.value = '';
     montoTransferencia.value = '';
     correoZelle.value = '';
     numRecibo.value = '';
+    watchEffect(()=>{
+    valido.value =isValid();
+    console.log("isValid()",isValid())
+})
 })
 const closeModal = () =>
 {
     // Cerrar el modal
-     const modal = new bootstrap.Modal("#form-pago");
+     const modal = new Modal("#form-pago");
      modal.hide();
 };
 
@@ -129,6 +139,7 @@ const submitForm = () =>
     {
         // Llamar a tu función AJAX para enviar los datos
         sendDataToServer();
+        enviando.value=true;
     } else
     {
         // Mostrar un mensaje de error o realizar otras acciones si los datos no son válidos
@@ -174,6 +185,9 @@ const sendDataToServer = async () =>
         .catch(ko => {
             console.log("ko", ko);
             alert("Ocurrio un problema. Si persiste el problema, puedes enviar los datos por WhatsApp o  Correo")
+        })
+        .finally(()=> {
+            enviando.value=false
         })
 
 };

@@ -25,7 +25,7 @@ import Condiciones from "@/components/pantalla/ayuda/terminos.vue"
 import Ayuda from "@/components/pantalla/ayuda/inicioAyuda.vue"
 import NoEncontrado from "@/components/pantalla/NoEncontrado.vue"
 import Perfil from "@/components/pantalla/perfil/"
-const Contacto = { template: '<div>Contacto</div>' }
+import Contacto from "@/components/pantalla/Contacto.vue"
 import Pagar  from "@/components/pantalla/Checkout/Assistant.vue"
 const Compras = { template: '<div>Compras</div>' }
 const Nosotros = { template: '<div>Nosotros</div>' }

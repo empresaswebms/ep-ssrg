@@ -158,7 +158,7 @@ import DatabaseLocal from "@/js/databaseLocal"
 import fetcher from "@/js/web/fetcher"
 import { onBeforeMount, ref, watch } from "vue"
 import Auth from "@/js/firebase/AuthHelper"
-
+import { Usuario } from "@/js/Modelos/Usuario"
 import { tiempoTranscurrido, convertirFecha } from "@/js/app/"
 import { animarElementos } from "@/js/views/animate"
 animarElementos()
@@ -190,18 +190,29 @@ fetcher.getData("geo/estados", null, (res) =>
 })
 watch(estadoCliente, (n) =>
 {
-    fetcher.getData("geo/ciudades", { id: n }, (res) =>
-    {
-        console.log(n)
-        ciudades.value = res.d
-    })
+    if (n){
+        fetcher.getData("geo/ciudades", { id: n }, (res) =>
+        {
+            console.log(n)
+            ciudades.value = res.d
+        })
+    }
 })
 
 // fetcher.getData("geo/ciudades",{id},(res)=>{
 //     estados.value = res.d
 // })
-onBeforeMount(async () =>
-{
+onBeforeMount(async () => {
+    const data = new Usuario(DatabaseLocal.loadData("factura",{} ));
+        nombreCliente.value =       data.nombre;
+        tipoCliente.value =         data.tipoPersona;
+        cedulaCliente.value =       data.cedula;
+        correoCliente.value =       data.correo;
+        telefonoCliente.value =     data.telefono;
+        estadoCliente.value =       data.estado;
+        ciudadCliente.value =       data.ciudad;
+        dirCliente.value =          data.direccion;
+    
     fetcher.getData("datoscliente",
         { userTokenId: await auth.currentUser.getIdToken(auth) },
         mostrarData)
@@ -209,45 +220,51 @@ onBeforeMount(async () =>
 
 const mostrarData = async (res) =>
 {
-    actualizando.value = false
-    console.log(res);
-    nombreCliente.value = res.d.Nombre
-    tipoCliente.value = res.d.TipoPersona
-    cedulaCliente.value = res.d.Cedula
-    correoCliente.value = res.d.Correo
-    telefonoCliente.value = res.d.Telefono
-    estadoCliente.value = res.d.Estado
-    ciudadCliente.value = res.d.Ciudad
-    dirCliente.value = res.d.Direccion
+    if (res.d){
 
+        const usuario = new Usuario(res.d)
+        actualizando.value = false
+        console.log(res);
+        nombreCliente.value = usuario.nombre
+        tipoCliente.value = usuario.tipo
+        cedulaCliente.value = usuario.cedula
+        correoCliente.value = usuario.correo
+        telefonoCliente.value = usuario.telefono
+        estadoCliente.value = usuario.estado
+        ciudadCliente.value = usuario.ciudad
+        dirCliente.value = usuario.direccion
+        
+        DatabaseLocal.saveData("factura", usuario)
+    }
+    
 }
 const actualizarcliente = async () =>
 {
     actualizando.value = true;
     fetcher.postData("actualizarcliente", {
         userTokenId: await auth.currentUser.getIdToken(auth),
-        nombre: nombreCliente.value,
-        tipoPersona: tipoCliente.value,
-        cedula: cedulaCliente.value,
-        correo: correoCliente.value,
-        telefono: telefonoCliente.value,
-        estado: estadoCliente.value,
-        ciudad: ciudadCliente.value,
-        direccion: dirCliente.value
+        nombre:         nombreCliente.value,
+        tipoPersona:    tipoCliente.value,
+        cedula:         cedulaCliente.value,
+        correo:         correoCliente.value,
+        telefono:       telefonoCliente.value,
+        estado:         estadoCliente.value,
+        ciudad:         ciudadCliente.value,
+        direccion:      dirCliente.value
     }).then((res) =>
     {
-        if (res.d == "ok")
+        console.log(res);
+        if (res.d)
         {
-
             DatabaseLocal.saveData("factura", {
-                nombre: nombreCliente.value,
-                tipoPersona: tipoCliente.value,
-                cedula: cedulaCliente.value,
-                correo: correoCliente.value,
-                telefono: telefonoCliente.value,
-                estado: estadoCliente.value,
-                ciudad: ciudadCliente.value,
-                direccion: dirCliente.value
+                nombre:         nombreCliente.value,
+                tipoPersona:    tipoCliente.value,
+                cedula:         cedulaCliente.value,
+                correo:         correoCliente.value,
+                telefono:       telefonoCliente.value,
+                estado:         estadoCliente.value,
+                ciudad:         ciudadCliente.value,
+                direccion:      dirCliente.value
             })
             alert("Los datos fueron actualizados")
         }

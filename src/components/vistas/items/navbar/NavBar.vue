@@ -11,7 +11,7 @@
 
 					<NavBarItem titulo="Inicio" dir="/" />
 					<NavBarItem titulo="Otros productos" dir="/productos" />
-					<NavBarItem titulo="Nosotros" dir="/nosotros" />
+					<!-- <NavBarItem titulo="Nosotros" dir="/nosotros" /> -->
 					<NavBarItem titulo="Contactanos" dir="/contacto" />
 					<NavBarItem v-if="!autenticado" titulo="Mi cuenta" icon="bi-person-circle" dir="/login" />
 					<NavBarItem v-if="autenticado" titulo="Mi cuenta" icon="bi-person-circle" dir="/perfil" />

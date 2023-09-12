@@ -1,8 +1,9 @@
 <template>
   <li class="nav-item">
     <a v-if="type=='a'" href="{{ href }}" class="nav-link">
-      <i :class="icon"></i> {{ titulo }}</a>
-    <router-link :to="dir" class="nav-link" v-else >{{ titulo }}</router-link>
+      <i v-if="icon" :class="icon"> </i> {{ titulo }} 
+    </a>
+    <router-link :to="dir" class="nav-link" v-else > {{ titulo }} </router-link>
   </li>
 </template>
 

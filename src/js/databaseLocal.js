@@ -1,12 +1,15 @@
 
 const saveData = (key, value) =>
 {
-    // const data = new DataLocalType(value);
+    // // const data = new DataLocalType(value);
+    // if (key=="factura")
+    //     debugger
+    const tipoObjeto = typeof value
     const dataProccessed ={
-        _typeStorage:typeof value,
-        _dataStorage:typeof value=="object"? JSON.stringify(value):value,
+        _typeStorage: tipoObjeto,
+        _dataStorage: tipoObjeto == "object" ? JSON.stringify(value) : value,
     };
-    window.localStorage.setItem(key,dataProccessed._dataStorage );
+    window.localStorage.setItem(key,JSON.stringify(dataProccessed) );
     // setDoc(firestore,doc("usuarios",usuario))
     console.log(`Data saved in ${key} as '${dataProccessed._typeStorage}' : ${dataProccessed._dataStorage}`)
 }
@@ -14,12 +17,11 @@ const saveData = (key, value) =>
 const loadData = (key, valueDefault) =>
 {
     // const dataSaved = new DataLocalType(window.localStorage.getItem(key));
-    const dataSaved = window.localStorage.getItem(key);
+    const dataSaved = JSON.parse(window.localStorage.getItem(key));
     var dataRaw 
     if (dataSaved){
         dataRaw = dataSaved._typeStorage=="object" ? JSON.parse(dataSaved._dataStorage):dataSaved._dataStorage;
     }
-
     return dataRaw //Devuelve el dato.
         ?? valueDefault //o el defecto
         ?? null; //o nulo

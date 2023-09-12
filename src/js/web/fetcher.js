@@ -1,8 +1,9 @@
-const _devEnable = false//window.location.protocol == "http:"
+// const _devEnable = false
+const _devEnable = window.location.protocol == "http:"
 const _serverLocal = `http://${window.location.hostname}:1234/`
 const _server = `https://api.elevapuertas.com/`
 
-function getData(metodo, datos, callback)
+function getData(metodo, datos, callback,fallido)
 {
     console.debug("dev: " + _devEnable);
     console.debug("Metodo: " + metodo);
@@ -25,6 +26,13 @@ function getData(metodo, datos, callback)
     {
         // console.log(response);
         callback(response);
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        if (fallido){
+            fallido({status: textStatus,error:errorThrown})
+        }else {
+            callback({err:errorThrown,status:textStatus})
+        }
     });
 }
 async function postData(metodo, datos)

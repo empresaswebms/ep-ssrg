@@ -15,8 +15,8 @@
 									@eliminar="$emit('eliminar-prod',item)" 
 								/>
 							</ol>
-							<div class="p-2 d-flex">
-								<div class="col-9">
+							<div class="p-2 d-flex" >
+								<div class="col-9" v-if=" cantidad>0">
 									<div class="articulos p-0">
 										<p>
 											<strong>Articulos: </strong>
@@ -28,9 +28,18 @@
 										</p>
 									</div>
 								</div>
+								<div class="col-9" v-else>
+									<div class="articulos p-0">
+										<p>
+											<strong>No has agregado ningun producto</strong>
+											Puedes encontrar buscando por la marca, modelo y año del vehiculo en la <router-link to="/" data-bs-dismiss="modal"  >página de Inicio</router-link>
+										</p>
+									</div>
+								</div>
 								<div class="col-3 justify-content-end">
-									<router-link to="/comprar" data-bs-dismiss="modal" class="btn btn-primary">Comprar</router-link>
-									<!-- <a href="#" @click="$emit('pagar-carrito')"  class="btn btn-primary">Comprar</a> -->
+									<!-- <router-link to="/comprar" data-bs-dismiss="modal" class="btn btn-primary">Comprar</router-link> -->
+									<button href="#" :disabled=" cantidad==0 " data-bs-dismiss="modal"  @click="$router.push('/comprar')"  
+									class="btn btn-primary">Comprar</button>
 								</div>
 							</div>
 						</div>
@@ -46,6 +55,7 @@
 <script setup>
 import { onMounted ,ref } from 'vue';
 import ProductoCarritoItem from './items/productos/ProductoCarritoItem.vue';
+import { Modal } from 'bootstrap';
 
 var emits = defineEmits(["pagar-carrito","eliminar-prod","view-mounted"]);
 
@@ -67,6 +77,10 @@ var prop = defineProps({
 onMounted(() => {
 	
 })
+
+function cerrarModal (){
+	
+}
 </script>
 
 <style>

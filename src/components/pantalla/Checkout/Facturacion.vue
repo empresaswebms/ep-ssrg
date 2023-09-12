@@ -1,38 +1,52 @@
 <template>
   <div>
-    <h2>Información del Cliente</h2>
-    <div class="mb-3">
-      <label for="nombre">Nombre y Apellido</label>
-      <input type="text" id="nombre" v-model="nombre" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="telefono">Teléfono</label>
-      <input type="tel" id="telefono" v-model="telefono" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="direccion">Dirección</label>
-      <input type="text" id="direccion" v-model="direccion" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="direccion">Cédula/RIF</label>
-      <input type="text" id="direccion" v-model="rif" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="direccion">Estado</label>
-      <input type="text" id="estado" v-model="estado" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="direccion">Ciudad</label>
-      <input type="text" id="ciudad" v-model="ciudad" class="form-control">
-    </div>
+    <fieldset disabled>
+
+      <h2>Información del Cliente</h2>
+      <p class="text-muted">Para cambiar esta información, puedes hacerlo desde <RouterLink to="/perfil">Mi Cuenta
+        </RouterLink>
+      </p>
+      <div class="mb-3">
+        <label for="nombre">Nombre y Apellido</label>
+        <input type="text" id="nombre" v-model="nombre" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label v-if="tipoPersona == 'V' || tipoPersona == 'E'" for="rif">Cédula</label>
+        <label v-if="tipoPersona == 'P'" for="rif">Pasaporte</label>
+        <label v-if="tipoPersona == 'J' || tipoPersona == 'G'" for="rif">RIF</label>
+        <input type="text" id="rif" v-model="rif" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" v-model="correo" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" v-model="telefono" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="direccion">Estado</label>
+        <input type="text" id="estado" v-model="estado" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="direccion">Ciudad</label>
+        <input type="text" id="ciudad" v-model="ciudad" disable class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" v-model="direccion" disable class="form-control">
+      </div>
+    </fieldset>
   </div>
 </template>
   
 <script setup>
-import { ref, reactive, defineProps, defineEmits, watch,onBeforeMount, onMounted } from 'vue';
-
-
-const needFetchData = ref()
+import { ref, reactive, defineProps, defineEmits, watchEffect, onBeforeMount, onMounted } from 'vue';
+import { Usuario } from "@/js/Modelos/Usuario"
+import databaseLocal from '@/js/databaseLocal';
+import moment from 'moment';
+import fetcher from '@/js/web/fetcher'
+import Auth from '@/js/firebase/AuthHelper';
 
 var cliente = reactive({
   nombre: "",
@@ -41,63 +55,93 @@ var cliente = reactive({
   estado: "",
   ciudad: "",
   rif: "",
+  tipoPersona: "",
+  cedula: "",
+  fecha: null,
 });
 
 const nombre = ref("")
 const telefono = ref("")
+const correo = ref("")
+const rif = ref("")
 const direccion = ref("")
 const estado = ref("")
 const ciudad = ref("")
-const rif = ref("")
+const cedula = ref("")
+const tipoPersona = ref("")
+const fecha = ref("")
+
+const auth = Auth.get();
+
 
 const props = defineProps({
-  "datosFactura": { required: true }
+  "datosFactura": { required: true, type: Usuario }
 })
 const emit = defineEmits(["update"]);
 
-watch(cliente, (n) =>
+watchEffect(() =>
 {
-  console.log("Factura reactive =>", n)
-  emit("update", { type: "factura", data: n })
+  const valor = { type: "factura", data: { nombre: nombre.value, telefono: telefono.value, correo: correo.value, rif: rif.value, direccion: direccion.value, estado: estado.value, ciudad: ciudad.value, cedula: cedula.value, tipoPersona: tipoPersona.value, fecha: fecha.value, } }
+  console.log("Factura reactive =>", valor)
+  emit("update", valor)
 })
 
 onBeforeMount(async () =>
 {
-    fetcher.getData("datoscliente",
-        { userTokenId: await auth.currentUser.getIdToken(auth) },
-        mostrarData)
+  console.debug("Solicitando datos onBeforeMount")
+  fetcher.getData("datoscliente",
+    { userTokenId: await auth.currentUser.getIdToken(auth) },
+    mostrarData)
 })
 
 onMounted(() =>
 {
+  const localUser = databaseLocal.loadData("factura", {})
+  const usuario = new Usuario(localUser)
 
-  cliente = {
-    nombre: props.datosFactura.nombre,
-    telefono: props.datosFactura.telefono,
-    direccion: props.datosFactura.direccion,
-    estado: props.datosFactura.estado,
-    ciudad: props.datosFactura.ciudad,
-    rif: props.datosFactura.rif,
+  console.debug("Solicitando datos onMounter", usuario)
+
+  if (usuario.fecha)
+  {
+    if (moment(usuario.fecha).isAfter(cliente.fecha))
+    {
+      // cliente = datosFacturacionUsuario
+
+      nombre.value = usuario.nombre;
+      telefono.value = usuario.telefono;
+      correo.value = usuario.correo;
+      rif.value = usuario.rif;
+      direccion.value = usuario.direccion;
+      estado.value = usuario.estado;
+      ciudad.value = usuario.ciudad;
+      cedula.value = usuario.cedula;
+      tipoPersona.value = usuario.tipoPersona;
+      fecha.value = usuario.fecha;
+    }
   }
-
-  nombre.value = props.datosFactura.nombre;
-  telefono.value = props.datosFactura.telefono;
-  direccion.value = props.datosFactura.direccion;
-  estado.value = props.datosFactura.estado;
-  ciudad.value = props.datosFactura.ciudad;
-  rif.value = props.datosFactura.rif;
+  
 });
 
 const mostrarData = async (res) =>
 {
-  cliente = {
-        nombre: res.d.Nombre,
-        telefono: res.d.Telefono,
-        direccion: res.d.Direccion,
-        estado: res.d.Estado,
-        ciudad: res.d.Ciudad,
-        rif: res.d.TipoPersona + "-" + res.d.Cedula,
-    }
+  console.debug("mostrarData", res)
+  if (res.d)
+  {
+    const usuario = new Usuario(res.d)
+    // const nuevoCliente = {
+    nombre.value      = usuario.nombre
+    telefono.value    = usuario.telefono
+    correo.value      = usuario.correo
+    rif.value         = usuario.rif
+    direccion.value   = usuario.direccion
+    estado.value      = usuario.estado
+    ciudad.value      = usuario.ciudad
+    cedula.value      = usuario.cedula
+    tipoPersona.value = usuario.tipoPersona
+    fecha.value       = usuario.fecha
+    // };
+    databaseLocal.saveData("factura", usuario)
+  }
 }
 
 </script>

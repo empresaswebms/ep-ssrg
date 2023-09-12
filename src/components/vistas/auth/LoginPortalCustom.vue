@@ -75,7 +75,6 @@ const signInWithGoogle = async () =>
 {
     try
     {
-        debugger
         // Usar el método signInWithPopup para mostrar el diálogo de Google
         const result = await signInWithPopup(auth, provider);
         // Obtener el usuario y el token de acceso del resultado

@@ -86,7 +86,6 @@ const props = defineProps({
     datosEnvio: { type: Object },
     datosPago: { type: String },
 })
-
 const metodosPago = {
     'transferencia': {
         nombre: 'Transferencia, Pago Móvil o PDV * ',
