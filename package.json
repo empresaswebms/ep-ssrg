@@ -5,22 +5,29 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode production --dest ../../elevapuertas-website",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start SSR": "node src/server.js",
+    "build:ssr": "vue-cli-service build --target node --dest dist-server"
   },
   "dependencies": {
-    "bootstrap": "^5.3.1",
+    "@popperjs/core": "^2.11.8",
+    "@splidejs/vue-splide": "^0.6.12",
+    "@vue/server-renderer": "^3.3.8",
+    "bootstrap": "^5.2.3",
     "core-js": "^3.8.3",
+    "express": "^4.18.2",
     "firebase": "^10.3.1",
     "firebaseui": "^6.1.0",
     "jsbarcode": "^3.11.5",
     "moment": "^2.29.4",
     "vue": "^3.2.13",
-    "vue-router": "^4.2.4"
+    "vue-lite-youtube-embed": "^1.2.1",
+    "vue-router": "^4.2.4",
+    "vue3-toastify": "^0.1.14"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
-    "@types/bootstrap": "^5.2.6",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",

@@ -1,7 +1,7 @@
 <template>
     <div>
         <PerfilUsuario></PerfilUsuario>
-        <button class="btn btn-primary" @click="cerrarSesion($router)">Cerrar sesión</button>
+        <!-- <button class="btn btn-primary" @click="cerrarSesion($router)">Cerrar sesión</button> -->
     </div>
 </template>
 

@@ -16,12 +16,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+        <div class="col-md-3  col-sm-6     align-self-stretch ftco-animate">
           <div class="media block-6 services services-2">
             <div class="media-body py-md-4 text-center">
-              <div
-                class="icon d-flex align-items-center justify-content-center"
-              >
+              <div class="icon d-flex align-items-center justify-content-center" >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   version="1.1"
@@ -71,12 +69,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+        <div class="col-md-3  col-sm-6 align-self-stretch ftco-animate">
           <div class="media block-6 services services-2">
             <div class="media-body py-md-4 text-center">
-              <div
-                class="icon d-flex align-items-center justify-content-center"
-              >
+              <div class="icon d-flex align-items-center justify-content-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   version="1.1"
@@ -136,12 +132,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+        <div class="col-md-3 col-sm-6 align-self-stretch ftco-animate">
           <div class="media block-6 services services-2">
             <div class="media-body py-md-4 text-center">
-              <div
-                class="icon d-flex align-items-center justify-content-center"
-              >
+              <div class="icon d-flex align-items-center justify-content-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   version="1.1"
@@ -188,12 +182,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+        <div class="col-md-3 col-sm-6 align-self-stretch ftco-animate">
           <div class="media block-6 services services-2">
             <div class="media-body py-md-4 text-center">
-              <div
-                class="icon d-flex align-items-center justify-content-center"
-              >
+              <div class="icon d-flex align-items-center justify-content-center">
                 <span class="flaticon-review"></span>
               </div>
               <h3>Seleccione un operador</h3>

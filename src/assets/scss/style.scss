@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5,
 .ftco-navbar-light {
 	background: transparent!important;
 	position: absolute;
-	top: 20px;
+	// top: 20px;
 	left: 0;
 	right: 0;
 	z-index: 3;
@@ -79,7 +79,7 @@ h1, h2, h3, h4, h5,
 	}
 
 	.navbar-brand {
-		color: $white;
+		color: $primary;
 		span{
 			color: $secondary;
 		}
@@ -99,23 +99,23 @@ h1, h2, h3, h4, h5,
 				padding-bottom: .9rem;
 				padding-left: 20px;
 				padding-right: 20px;
-				color: $white;
+				color: $primary;
 				font-weight: 400;
 				&:hover {
-					color: $secondary;
+					color: $primary;
 				}
 				opacity: 1!important;
 				@include media-breakpoint-down(md){
 					padding-left: 0;
 					padding-right: 0;
 					padding-bottom: 0;
-					color: $white;
+					color: $primary;
 				}
 			}
 
 			.dropdown-menu{
 				border: none;
-				background: $white;
+				background: $secondary;
 				-webkit-box-shadow: 0px 10px 34px -20px rgba(0,0,0,0.41);
 				-moz-box-shadow: 0px 10px 34px -20px rgba(0,0,0,0.41);
 				box-shadow: 0px 10px 34px -20px rgba(0,0,0,0.41);
@@ -186,7 +186,7 @@ h1, h2, h3, h4, h5,
 	}
 	.navbar-toggler {
 		border: none;
-		color: rgba(255,255,255,.5)!important;
+		color: $primary !important;
 		cursor: pointer;
 		padding-right: 0;
 		text-transform: uppercase;
@@ -205,7 +205,7 @@ h1, h2, h3, h4, h5,
 		left: 0;
 		top: 0;
 		margin-top: -130px;
-		background: $white!important;
+		background: $secondary!important;
 		box-shadow: 0 0 10px 0 rgba(0,0,0,.1);
 		.nav-item {
 			> .nav-link{
@@ -267,7 +267,7 @@ h1, h2, h3, h4, h5,
 		.nav-link {
 			padding-top: .9rem!important;
 			padding-bottom: .9rem!important;
-			color: $black!important;
+			color: $primary!important;
 			&.active {
 				color: $primary!important;
 			}
@@ -1340,6 +1340,10 @@ textarea.form-control {
 .bg-primary {
 	background: $primary!important;
 }
+.bg-secondary {
+	background: $secondary!important;
+}
+
 .bg-black{
 	background: $black;
 }

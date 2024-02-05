@@ -1,6 +1,6 @@
-import moment from "moment";
-import "moment/locale/es";
-moment.locale('es')
+const moment = require("moment");
+require("moment/locale/es");
+moment.locale('es');
 
 function encodeJson (obj) {
 	return btoa(JSON.stringify(obj))
@@ -32,7 +32,11 @@ function convertirFecha (fecha) {
 	return moment(fecha).format('MM/DD/YYYY');
 }
 
-export {
-	diffSegundos, diffDias, tiempoTranscurrido,
-	decodeJson,encodeJson,convertirFecha
-}
+module.exports = {
+	diffSegundos,
+	diffDias,
+	tiempoTranscurrido,
+	decodeJson,
+	encodeJson,
+	convertirFecha
+  };

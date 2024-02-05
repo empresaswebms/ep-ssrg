@@ -7,8 +7,10 @@
           <h2 class="mb-2">Nuestros Servicios</h2>
         </div>
       </div>
-      <div class="row d-flex">
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+      <div class="row d-flex justify-content-center">
+
+        <!-- Envios gratis a nível nacional -->
+        <div class="col-md-3 col-sm-6  align-self-stretch ftco-animate">
           <div class="media block-6 services">
             <div class="media-body py-md-4">
               <div class="d-flex mb-3 align-items-center">
@@ -43,58 +45,18 @@
                     </g>
                   </svg>
                 </div>
-                <h3 class="heading mb-0 ps-3">Envios a nivel nacional</h3>
+                <h3 class="heading mb-0 ps-3">Envios gratis a nível nacional</h3>
               </div>
               <p>
-                Nos aseguramos de que nuestros elevadores de neumáticos lleguen
-                a donde nuestros clientes lo necesiten.
+                Nos aseguramos de que nuestros productos lleguen a dónde nuestros clientes a donde tú lo necesites
               </p>
             </div>
           </div>
         </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
-          <div class="media block-6 services">
-            <div class="media-body py-md-4">
-              <div class="d-flex mb-3 align-items-center">
-                <div class="icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    version="1.1"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    xmlns:svgjs="http://svgjs.com/svgjs"
-                    width="48"
-                    height="48"
-                    x="0"
-                    y="0"
-                    viewBox="0 0 64 64"
-                    style="enable-background: new 0 0 512 512"
-                    xml:space="preserve"
-                  >
-                    <g>
-                      <path
-                        d="M33 63h30V39H33zm12-22h6v2h-6zm-10 0h8v4h10v-4h8v20H35z"
-                        fill="#000000"
-                        data-bs-original="#000000"
-                      ></path>
-                      <path
-                        d="M57 57h2v2h-2zM53 57h2v2h-2zM49 57h2v2h-2zM61 21h-2V1H33v20h-2V1H5v20H3c-1.103 0-2 .897-2 2v2c0 1.103.897 2 2 2h5.263A7.953 7.953 0 0 0 8 29a7.996 7.996 0 0 0 3.585 6.665C5.462 37.555 1 43.265 1 50a5.003 5.003 0 0 0 3 4.576V63h27V50c0-6.735-4.462-12.445-10.585-14.335A7.996 7.996 0 0 0 24 29c0-.692-.097-1.359-.263-2H61c1.103 0 2-.897 2-2v-2c0-1.103-.897-2-2-2zM43 3h6v2h-6zm-8 0h6v4h10V3h6v18h-6v-4H41v4h-6zm14 18h-6v-2h6zM15 3h6v2h-6zM7 3h6v4h10V3h6v18h-6v-4H13v4H7zm8 18v-2h6v2zM3 25v-2h7.726a8.069 8.069 0 0 0-1.644 2zm3 30h4v6H6zm9.5-7H12v-5h7v5h5v13H12v-6h3.5c1.93 0 3.5-1.57 3.5-3.5S17.43 48 15.5 48zm5.5-3.586L22.586 46H21zM29 50v11h-3V46.586L20.414 41H10v7H7v2h8.5c.827 0 1.5.673 1.5 1.5s-.673 1.5-1.5 1.5H6c-1.654 0-3-1.346-3-3 0-7.168 5.832-13 13-13s13 5.832 13 13zM16 35c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm45-10H22.918a8.047 8.047 0 0 0-1.644-2H61zM49 53h10v2H49z"
-                        fill="#000000"
-                        data-bs-original="#000000"
-                      ></path>
-                    </g>
-                  </svg>
-                </div>
-                <h3 class="heading mb-0 ps-3">Amplio stock</h3>
-              </div>
-              <p>
-                Contamos con un amplio inventario de elevadores de neumáticos,
-                lo que nos permite brindar una respuesta rápida y oportuna a las
-                necesidades de nuestros clientes.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+
+        
+        <!-- Calidad inigualable -->
+        <div class="col-md-3 col-sm-6  align-self-stretch ftco-animate">
           <div class="media block-6 services">
             <div class="media-body py-md-4">
               <div class="d-flex mb-3 align-items-center">
@@ -433,14 +395,57 @@
                 <h3 class="heading mb-0 ps-3">Calidad inigualable</h3>
               </div>
               <p>
-                En Elevapuertas nos esforzamos por ofrecer un producto de
-                calidad excepcional que brinde la misma experiencia que si fuera
-                del fabricante original.
+                Ofrecemos un producto de calidad y acabado excepcional que cumple con los más alto estandares ISO 9001
               </p>
             </div>
           </div>
         </div>
-        <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+
+
+        <!-- Amplio stock -->
+        <div class="col-md-3 col-sm-6 align-self-stretch ftco-animate">
+          <div class="media block-6 services">
+            <div class="media-body py-md-4">
+              <div class="d-flex mb-3 align-items-center">
+                <div class="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    version="1.1"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns:svgjs="http://svgjs.com/svgjs"
+                    width="48"
+                    height="48"
+                    x="0"
+                    y="0"
+                    viewBox="0 0 64 64"
+                    style="enable-background: new 0 0 512 512"
+                    xml:space="preserve"
+                  >
+                    <g>
+                      <path
+                        d="M33 63h30V39H33zm12-22h6v2h-6zm-10 0h8v4h10v-4h8v20H35z"
+                        fill="#000000"
+                        data-bs-original="#000000"
+                      ></path>
+                      <path
+                        d="M57 57h2v2h-2zM53 57h2v2h-2zM49 57h2v2h-2zM61 21h-2V1H33v20h-2V1H5v20H3c-1.103 0-2 .897-2 2v2c0 1.103.897 2 2 2h5.263A7.953 7.953 0 0 0 8 29a7.996 7.996 0 0 0 3.585 6.665C5.462 37.555 1 43.265 1 50a5.003 5.003 0 0 0 3 4.576V63h27V50c0-6.735-4.462-12.445-10.585-14.335A7.996 7.996 0 0 0 24 29c0-.692-.097-1.359-.263-2H61c1.103 0 2-.897 2-2v-2c0-1.103-.897-2-2-2zM43 3h6v2h-6zm-8 0h6v4h10V3h6v18h-6v-4H41v4h-6zm14 18h-6v-2h6zM15 3h6v2h-6zM7 3h6v4h10V3h6v18h-6v-4H13v4H7zm8 18v-2h6v2zM3 25v-2h7.726a8.069 8.069 0 0 0-1.644 2zm3 30h4v6H6zm9.5-7H12v-5h7v5h5v13H12v-6h3.5c1.93 0 3.5-1.57 3.5-3.5S17.43 48 15.5 48zm5.5-3.586L22.586 46H21zM29 50v11h-3V46.586L20.414 41H10v7H7v2h8.5c.827 0 1.5.673 1.5 1.5s-.673 1.5-1.5 1.5H6c-1.654 0-3-1.346-3-3 0-7.168 5.832-13 13-13s13 5.832 13 13zM16 35c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm45-10H22.918a8.047 8.047 0 0 0-1.644-2H61zM49 53h10v2H49z"
+                        fill="#000000"
+                        data-bs-original="#000000"
+                      ></path>
+                    </g>
+                  </svg>
+                </div>
+                <h3 class="heading mb-0 ps-3">Amplio stock</h3>
+              </div>
+              <p>
+                Contamos con un amplio inventario de cerraduras, manillas, platinas y gatos de elevación que nos permite brindarte una solución rápida y eficiente.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Servicio de instalación -->
+        <div class="col-md-3 col-sm-6  align-self-stretch ftco-animate">
           <div class="media block-6 services">
             <div class="media-body py-md-4">
               <div class="d-flex mb-3 align-items-center">
@@ -781,13 +786,12 @@
                 <h3 class="heading mb-0 ps-3">Servicio de instalación</h3>
               </div>
               <p>
-                Ofrecemos el servicio de instalación en nuestro taller, lo que
-                garantiza una instalación adecuada y segura de nuestros
-                elevadores de neumáticos.
+                En nuestra tienda, nuestros especialistas en instalación se aseguran de que cada gato de elevación se monte de forma profesional y segura. Tu tranquilidad es nuestra prioridad respaldada por la pericia nuestro equipo
               </p>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>

@@ -7,7 +7,7 @@ class ProductoCarrito{
         this.Img = obj.Img || "images/placeholder_product.jpg";
         this.Uso =obj.Uso || null;
         this.Precio =obj.Precio || 0;
-        this.Cantidad =obj.Cantidad || cantidad || 0;
+        this.Cantidad = cantidad || obj.Cantidad || 0;
         }
     }
 

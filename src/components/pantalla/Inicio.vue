@@ -1,5 +1,22 @@
 <template>
-  <div class="hero-wrap" style="background-image: url('images/bg_1.jpg')" data-stellar-background-ratio="0.2">
+ 
+  <Splide :options="{ rewind: true, autoHeight:true, width: '100%', rewindbydrag:true }" role="banner" aria-label="Avisos" :tag="section">
+      <SplideSlide>
+        <img class="splideImg" src="/images/marino.jpg" alt="Sample 1">
+      </SplideSlide>
+      <SplideSlide>
+        <img class="splideImg" src="/images/manillas.jpg" alt="Sample 2">
+      </SplideSlide>
+      <SplideSlide>
+        <img class="splideImg" src="/images/muebles-auto.jpg" alt="Sample 2">
+      </SplideSlide>
+      <SplideSlide>
+        <img class="splideImg" src="/images/platinas.jpg" alt="Sample 2">
+      </SplideSlide>
+  </Splide>
+
+
+  <!-- <div class="hero-wrap" style="background-image: url('images/bg_1.jpg')" data-stellar-background-ratio="0.2">
     <div class="overlay"></div>
     <div class="container">
       <div class="row g-0 slider-text justify-content-start align-items-center">
@@ -19,7 +36,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <section class="ftco-section ftco-no-pb mt-2 pt-2">
     <div class="container">
@@ -31,7 +48,7 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <div class="search-wrap-1 ftco-animate mb-5">
+          <div class="ftco-animate mb-5">
             <form action="#" class="search-property-1">
               <div class="row">
                 <!-- Marcas -->
@@ -54,7 +71,7 @@
                 </div>
               </div>
               <div class="row">
-                <p>
+                <p class="col">
                   Estamos para ayudarte
                   <a class="" href="http://wa.me/">¿No encuentras tu vehiculo? ¿no sabes que repuesto
                     necesitas?</a>
@@ -64,17 +81,47 @@
           </div>
         </div>
       </div>
-      <div id="resultados" class="row resultadosBusqueda" :ref="elementoBusqueda" v-if="productosResultados.length > 0">
+      <div id="resultados" class="row resultadosBusqueda mb-5" :ref="elementoBusqueda"
+        v-if="productosResultados.length > 0">
         <ProductItem v-for="producto in productosResultados" :key="producto.Id" :data="producto"
           @agregar-prod="agregarProducto" @comprar-prod="comprarProducto" @consultar-prod="consultarProducto">
         </ProductItem>
       </div>
+      <div id="resultados" class="container mb-5" v-else-if="enBusqueda">
+        <div class="container text-center">
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-8">
+              <img width="100" height="100" src="/images/busqueda.svg" class="rounded" alt="Caja de un producto y lupa">
+              <div class="text-center">
+                No se encontro producto para este modelo. Puedes contactarnos para ayudarte a encontrar
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultados" class="container mb-5" v-else>
+
+      </div>
+
     </div>
   </section>
 
   <seccion-servicios />
   <seccion-metodo-compra />
   <seccion-instagram />
+
+  <div id="avisoToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Hello, world! This is a toast message.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+
   <!-- loader -->
 </template>
 
@@ -88,12 +135,21 @@ import { getData } from "@/js/web/fetcher";
 
 import { animarElementos, scrollToElement } from "@/js/views/animate";
 
+// import { Toast } from "bootstrap/dist/js/bootstrap";
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+const toastConfig = { autoClose: 5000, position:toast.POSITION.TOP_CENTER};
+
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import SeccionMetodoCompra from "./InicioComponentes/SeccionMetodoCompra.vue";
 import SeccionInstagram from "./InicioComponentes/SeccionInstagram.vue";
 import SeccionServicios from "./InicioComponentes/SeccionServicios.vue";
 import { ProductoInfo } from "@/js/CartApp/Producto";
 
 var elementoBusqueda = ref()
+
+var avisoToast = ref();
 
 var marcasAutos = ref([]);
 var modelosAutos = ref([]);
@@ -104,6 +160,9 @@ var modeloSelected = ref(null);
 var anosSelected = ref(null);
 
 var productosResultados = ref([]);
+
+var enBusqueda = ref(false);
+
 var emits = defineEmits(["view-mounted", "agregar-producto", "comprar-producto", "consultar-producto"]);
 
 onBeforeMount(() =>
@@ -113,7 +172,8 @@ onBeforeMount(() =>
     console.log(datos)
     if (datos.d)
       marcasAutos.value = datos.d;
-    else{
+    else
+    {
       marcasAutos.value = ["Acura", "Alfa Romeo", "American Motors", "Aston Martin", "Audi", "Austin", "Bentley", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Citroen", "Dacia", "Daewoo", "Delorean", "Dodge", "Ferrari", "Fiat", "Ford", "GMC", "Honda", "Hummer", "Hyundai", "International", "Isuzu", "Jaguar", "Jeep", "Kia", "Lada", "Lancia", "Land Rover", "Lexus", "Lincoln", "Maserati", "Mazda", "Mercedes-Benz", "Mercury", "Mg", "Mini", "Mitsubishi", "Nissan", "Opel", "Peugeot", "Ram", "Renault", "Rover", "Subaru", "Suzuki", "Tesla", "Toyota", "Volkswagen", "Volvo"]
     }
 
@@ -122,18 +182,20 @@ onBeforeMount(() =>
 
 onMounted(() =>
 {
+  
   emits("view-mounted", elementoBusqueda);
   animarElementos();
 })
 
-function agregarProducto(producto)
+function agregarProducto(producto, cantidad)
 {
-  emits("agregar-producto", producto);
+  toast.info("Añadido al carrito", toastConfig);
+  emits("agregar-producto", producto, cantidad);
 }
 
-function comprarProducto(producto)
+function comprarProducto(producto, cantidad)
 {
-  emits("comprar-producto", producto);
+  emits("comprar-producto", producto, cantidad);
 }
 
 function consultarProducto(producto)
@@ -172,28 +234,39 @@ function cargarAños(modelo)
   );
 }
 
+/**
+ * 
+ * @param {String} anno año del modelo
+ */
 function cargarProductos(anno)
 {
   anosSelected.value = anno;
   productosResultados.value = [];
+  enBusqueda.value = true;
   getData(
     "search",
     { marca: marcaSelected.value, modelo: modeloSelected.value, anno: anno },
     (datos) =>
     {
       console.log("cargarProductos");
-      if (datos.d)
+      if (datos.d != undefined)
       {
-
         productosResultados.value = datos.d.map((t, i, a) => new ProductoInfo(t));
         console.log(datos.d);
+        enBusqueda.value = true;
+        
       } else
       {
-        alert("Problemas de conexion. Revisa tu internet.")
+        toast.error("Ocurrio un error. ¿Estas conectado a internet?", toastConfig);
       }
     });
 }
 
 </script>
 
-<style></style>
+<style>
+.splideImg {
+  width:100%;
+}
+
+</style>

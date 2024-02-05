@@ -41,13 +41,17 @@ async function postData(metodo, datos)
     console.debug("Metodo: " + metodo);
     console.debug("Datos:");
     console.debug(datos);
+
     const myUrlWithParams = new URL((_devEnable ? _serverLocal : _server) + metodo);
 
     var settings = {
-        "url": myUrlWithParams.href,
-        "method": "POST",
+        url: myUrlWithParams.href,
+        method: "POST",
         crossDomain: true,
-        "timeout": 30000,
+        processData: false,
+        mimeType: "multipart/form-data",
+        timeout: 30000,
+        contentType: false,
         data: datos
     };
 

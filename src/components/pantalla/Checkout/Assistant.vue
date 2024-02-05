@@ -77,9 +77,9 @@ import { getDoc, doc } from "firebase/firestore"
 import { getData, vaciarCarrito } from '@/js/CartApp/CartPlugin';
 import ModalAviso from './ModalAviso.vue';
 import DatabaseLocal from '@/js/databaseLocal'
-import Step1 from './Facturacion.vue';
+// import Step1 from './Facturacion.vue';
 import Step2 from './Envio.vue';
-import Step3 from './MetodoPago.vue';
+// import Step3 from './MetodoPago.vue';
 import Step4 from './Resumen.vue';
 import Finalizado from './Finalizado.vue';
 
@@ -115,9 +115,9 @@ onMounted(() =>
     animarElementos()
 })
 const steps = [
-    { id: "factura", label: 'Datos de factura', icon: "bi-receipt", component: Step1 },
+    // { id: "factura", label: 'Datos de factura', icon: "bi-receipt", component: Step1 },
     { id: "envio", label: 'Datos de envio', icon: "bi-box-seam", component: Step2 },
-    { id: "pago", label: 'Metodo de pago', icon: "bi-wallet", component: Step3 },
+    // { id: "pago", label: 'Metodo de pago', icon: "bi-wallet", component: Step3 },
     { id: "resumen", label: 'Resumen de compra', icon: "bi-cart-check", component: Step4 },
 ];
 
@@ -216,16 +216,18 @@ const check = (data) =>
 }
 const finishChekout = async () =>
 {
-    fetcher.postData("api/generarCompra", {
-        items: JSON.parse(JSON.stringify(getData().articles)),
-        data: { factura: datosFactura.value, envio: datosEnvio.value, pago: datosPago.value },
-        userTokenId: await auth.currentUser.getIdToken()
-    })
+    const usertoken = await auth.currentUser.getIdToken();
+    const form= new FormData();
+    form.append("items", JSON.stringify(getData().articles),);
+    form.append("data", JSON.stringify({ envio: datosEnvio.value  }),);
+    form.append("userTokenId", usertoken);
+    console.log(usertoken);
+    fetcher.postData("api/generarCompra", form)
         .then(rst =>
         {
             console.log(rst);
             procesoExitoso.value = true;
-            vaciarCarrito();
+            vaciarCarrito(); // TODO DESCOMENTAR
             scrollToElement("pasosCompraTabs")
 
         })

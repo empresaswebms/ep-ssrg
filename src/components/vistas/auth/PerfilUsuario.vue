@@ -39,6 +39,10 @@
                             <h5 v-if="user.verified">Cuenta verificada <i class="bi bi-check2-circle text-primary"></i></h5>
                             <h5 v-else> Cuenta sin verificar <i class="bi bi-exclamation-circle text-danger"></i></h5>
                         </div>
+                        <div>
+
+                            <button class="btn btn-primary" @click="cerrarSesion($router)">Cerrar sesión</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,13 +61,13 @@
                                     :disabled="actualizando" placeholder="Ingrese su nombre legal">
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="eMail">Correo</label>
                                 <input type="email" class="form-control" id="eMail" v-model="correoCliente"
                                     :disabled="actualizando" placeholder="Ingrese su correo">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label for="phone">Teléfono</label>
@@ -73,9 +77,9 @@
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <div class="form-group">
-                                <label for="phone">Cédula/RIF</label>
+                                <label for="cedula">Cédula/RIF</label>
                                 <div class="d-flex flex-row">
-                                    <select class="form-select col-2" v-model="tipoCliente" :disabled="actualizando"
+                                    <select class="form-control col-3" v-model="tipoCliente" :disabled="actualizando"
                                         aria-label="Default select example">
                                         <option value="V">V</option>
                                         <option value="J">J</option>
@@ -95,21 +99,14 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <h6 class="mt-3 mb-2 text-primary">Dirección del cliente</h6>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="Direccion">Dirección</label>
-                                <input type="name" class="form-control" v-model="dirCliente" :disabled="actualizando"
-                                    id="Direccion" placeholder="Dirección postal">
-                            </div>
 
-                        </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                             <!-- <SelectorForm id="estados" titulo="Estado" :opciones="estados" :conf="{ id: 'id', txt: 'nombre' }"
                                 placeholder="Seleccione un estado" /> -->
 
                             <div class="form-group">
                                 <label for="phone">Estado</label>
-                                <select class="form-select" v-model="estadoCliente" :disabled="actualizando"
+                                <select class="form-control" v-model="estadoCliente" :disabled="actualizando"
                                     aria-label="Default select example">
                                     <option v-for="item in estados" :key="item" :value="item.id">{{ item.nombre }}
                                     </option>
@@ -123,11 +120,18 @@
 
                             <div class="form-group">
                                 <label for="phone">Ciudad</label>
-                                <select class="form-select" v-model="ciudadCliente" :disabled="actualizando"
+                                <select class="form-control" v-model="ciudadCliente" :disabled="actualizando"
                                     aria-label="Default select example">
                                     <option v-for="item in ciudades" :key="item" :value="item.id">{{ item.nombre }}
                                     </option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Direccion">Dirección</label>
+                                <input type="name" class="form-control" v-model="dirCliente" :disabled="actualizando"
+                                    id="Direccion" placeholder="Dirección">
                             </div>
                         </div>
                         <!--                         
@@ -142,7 +146,11 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="text-right">
                                 <button type="button" id="submit" @click="actualizarcliente" name="submit"
-                                    class="btn btn-primary" :disabled="actualizando">Actualizar</button>
+                                    class="btn btn-primary me-2" :disabled="actualizando">Actualizar</button>
+                                <router-link  to="/comprar" class="btn btn-primary ms-2"
+                                    :class="{ disabled: itemsCarrito == 0 }" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-title="Debe de tener algun articulo en el carrito para continuar">Completar
+                                    pedido</router-link>
                             </div>
                         </div>
                     </div>
@@ -161,9 +169,18 @@ import Auth from "@/js/firebase/AuthHelper"
 import { Usuario } from "@/js/Modelos/Usuario"
 import { tiempoTranscurrido, convertirFecha } from "@/js/app/"
 import { animarElementos } from "@/js/views/animate"
-animarElementos()
+import { useRouter } from 'vue-router';
+import { getData } from "@/js/CartApp/CartPlugin"
+const router = useRouter();
 
-var auth = Auth.get()
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+const toastConfig = { autoClose: 5000, position: toast.POSITION.TOP_CENTER };
+
+animarElementos();
+
+var auth = Auth.get();
 const user = {
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
@@ -176,21 +193,24 @@ var estados = ref();
 var ciudades = ref();
 
 var actualizando = ref(true);
-const nombreCliente = ref()
-const correoCliente = ref()
-const telefonoCliente = ref()
-const tipoCliente = ref()
-const cedulaCliente = ref()
-const dirCliente = ref()
-const estadoCliente = ref()
-const ciudadCliente = ref()
+const nombreCliente = ref();
+const correoCliente = ref();
+const telefonoCliente = ref();
+const tipoCliente = ref();
+const cedulaCliente = ref();
+const dirCliente = ref();
+const estadoCliente = ref();
+const ciudadCliente = ref();
+
 fetcher.getData("geo/estados", null, (res) =>
 {
     estados.value = res.d
 })
+
 watch(estadoCliente, (n) =>
 {
-    if (n){
+    if (n)
+    {
         fetcher.getData("geo/ciudades", { id: n }, (res) =>
         {
             console.log(n)
@@ -198,21 +218,27 @@ watch(estadoCliente, (n) =>
         })
     }
 })
+var itemsCarrito = ref(0);
+
+var infoCart = getData();
+// debugger;
+itemsCarrito.value = infoCart.count;
 
 // fetcher.getData("geo/ciudades",{id},(res)=>{
 //     estados.value = res.d
 // })
-onBeforeMount(async () => {
-    const data = new Usuario(DatabaseLocal.loadData("factura",{} ));
-        nombreCliente.value =       data.nombre;
-        tipoCliente.value =         data.tipoPersona;
-        cedulaCliente.value =       data.cedula;
-        correoCliente.value =       data.correo;
-        telefonoCliente.value =     data.telefono;
-        estadoCliente.value =       data.estado;
-        ciudadCliente.value =       data.ciudad;
-        dirCliente.value =          data.direccion;
-    
+onBeforeMount(async () =>
+{
+    const data = new Usuario(DatabaseLocal.loadData("factura", {}));
+    nombreCliente.value = data.nombre;
+    tipoCliente.value = data.tipoPersona;
+    cedulaCliente.value = data.cedula;
+    correoCliente.value = data.correo;
+    telefonoCliente.value = data.telefono;
+    estadoCliente.value = data.estado;
+    ciudadCliente.value = data.ciudad;
+    dirCliente.value = data.direccion;
+
     fetcher.getData("datoscliente",
         { userTokenId: await auth.currentUser.getIdToken(auth) },
         mostrarData)
@@ -220,7 +246,8 @@ onBeforeMount(async () => {
 
 const mostrarData = async (res) =>
 {
-    if (res.d){
+    if (res.d)
+    {
 
         const usuario = new Usuario(res.d)
         actualizando.value = false
@@ -233,52 +260,89 @@ const mostrarData = async (res) =>
         estadoCliente.value = usuario.estado
         ciudadCliente.value = usuario.ciudad
         dirCliente.value = usuario.direccion
-        
+
         DatabaseLocal.saveData("factura", usuario)
     }
-    
+
 }
 const actualizarcliente = async () =>
 {
-    actualizando.value = true;
-    fetcher.postData("actualizarcliente", {
-        userTokenId: await auth.currentUser.getIdToken(auth),
-        nombre:         nombreCliente.value,
-        tipoPersona:    tipoCliente.value,
-        cedula:         cedulaCliente.value,
-        correo:         correoCliente.value,
-        telefono:       telefonoCliente.value,
-        estado:         estadoCliente.value,
-        ciudad:         ciudadCliente.value,
-        direccion:      dirCliente.value
-    }).then((res) =>
-    {
-        console.log(res);
-        if (res.d)
-        {
-            DatabaseLocal.saveData("factura", {
-                nombre:         nombreCliente.value,
-                tipoPersona:    tipoCliente.value,
-                cedula:         cedulaCliente.value,
-                correo:         correoCliente.value,
-                telefono:       telefonoCliente.value,
-                estado:         estadoCliente.value,
-                ciudad:         ciudadCliente.value,
-                direccion:      dirCliente.value
-            })
-            alert("Los datos fueron actualizados")
-        }
-        else
-            alert("Error al actualizar: " + res.err)
-    }).catch(err =>
-    {
-        alert("Error al actualizar: " + err)
-    }).finally(() =>
+    if (nombreCliente.value &&
+        tipoCliente.value &&
+        cedulaCliente.value &&
+        correoCliente.value &&
+        telefonoCliente.value &&
+        estadoCliente.value &&
+        ciudadCliente.value &&
+        dirCliente.value)
     {
 
-        actualizando.value = false;
-    })
+        let form = new FormData();
+        form.append("userTokenId", await auth.currentUser.getIdToken(auth));
+        form.append("nombre", nombreCliente.value);
+        form.append("tipoPersona", tipoCliente.value);
+        form.append("cedula", cedulaCliente.value);
+        form.append("correo", correoCliente.value);
+        form.append("telefono", telefonoCliente.value);
+        form.append("estado", estadoCliente.value);
+        form.append("ciudad", ciudadCliente.value);
+        form.append("direccion", dirCliente.value);
+
+        actualizando.value = true;
+        fetcher.postData("actualizarcliente", form).then((res) =>
+        {
+            const resp = JSON.parse(res)
+            console.log(resp);
+            if (resp.d)
+            {
+                DatabaseLocal.saveData("factura", {
+                    nombre: nombreCliente.value     || "",
+                    tipoPersona: tipoCliente.value  || "",
+                    cedula: cedulaCliente.value     || "",
+                    correo: correoCliente.value     || "",
+                    telefono: telefonoCliente.value || "",
+                    estado: estadoCliente.value     || "",
+                    ciudad: ciudadCliente.value     || "",
+                    direccion: dirCliente.value     || ""
+                })
+                // alert("Los datos fueron actualizados")
+
+                toast.success("Los datos fueron actualizados", toastConfig);
+            }
+            else
+
+                toast.error("Ocurrio un error. ¿Estas conectado a internet?", toastConfig);
+            // alert("Error al actualizar: " + res.err)
+
+        }).catch(err =>
+        {
+            console.debug(err)
+            toast.error("Error al actualizar: " + err, toastConfig);
+            // alert("Error al actualizar: " + err)
+        }).finally(() =>
+        {
+
+            actualizando.value = false;
+        })
+    }
+    toast.error("No has rellenado todos los datos", toastConfig);
+
+}
+
+
+
+function cerrarSesion()
+{
+    auth.signOut()
+        .then((v) =>
+        {
+            router.push("/");
+        });
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+a.btn-primary {
+
+}
+</style>

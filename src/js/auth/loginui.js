@@ -1,12 +1,12 @@
-import auth from 'firebase/auth';
-import firebaseui from 'firebaseui';
+const firebase = require('firebase/auth');
+const firebaseui = require('firebaseui');
 
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 ui.setConfig({
   signInOptions: [
-    { 
-      provider: auth.EmailAuthProvider.PROVIDER_ID 
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
     },
     {
       provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -16,22 +16,18 @@ ui.setConfig({
         'https://www.googleapis.com/auth/userinfo.profile',
       ],
       customParameters: {
-        // Forces account selection even when one account
-        // is available.
-        prompt: 'select_account'
-      }
+        prompt: 'select_account',
+      },
     },
   ],
-  // Terms of service url.
   tosUrl: '/ayuda/terminos',
-  // Privacy policy url.
-  privacyPolicyUrl: '/ayuda/privacidad'
+  privacyPolicyUrl: '/ayuda/privacidad',
 });
 
-function iniciarLogin(elemento){
+function iniciarLogin(elemento) {
   ui.start(elemento);
 }
 
 module.exports = {
-  iniciarLogin
-}
+  iniciarLogin,
+};

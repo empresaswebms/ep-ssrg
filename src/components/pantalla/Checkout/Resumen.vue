@@ -6,14 +6,9 @@
             <div class="card" style="">
                 <div class="card-body">
                     <h5 class="card-title">Información de Facturación</h5>
-                    <p class="card-text">Nombre y Apellido: {{ datosFactura.nombre }}</p>
-                    <p class="card-text">Teléfono: {{ datosFactura.telefono }}</p>
-                    <p class="card-text">Dirección: {{ datosFactura.direccion }}</p>
-                    <p class="card-text">Estado: {{ datosFactura.estado }}</p>
-                    <p class="card-text">Ciudad: {{ datosFactura.ciudad }}</p>
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Tu compra</span>
-                        <span class="badge bg-primary rounded-pill">{{datos.count}}</span>
+                        <span class="badge bg-primary rounded-pill text-white">{{datos.count}}</span>
                     </h4>
                     <ul class="list-group mb-3">
                         <producto-factura-item  
@@ -26,7 +21,6 @@
                             <strong>{{ datos.total }}</strong>
                         </li>
                     </ul>
-                    <a href="#" @click="$emit('volver-paso',0)" class="card-link">Editar</a>
                 </div>
             </div>
         </div>
@@ -58,14 +52,15 @@
                 <div class="card-body">
                     <h5 class="card-title">Información de Método de Pago</h5>
                     
-                    <p class="card-text" >Metodo de pago: {{ metodosPago[datosPago].nombre }}</p>
-                    <p class="card-text" >Detalles: {{ metodosPago[datosPago].descripcion }}</p>
+                    <p class="card-text" >Los datos de pago se enviaran por correo electrónico.</p>
+                    <p class="card-text" >Debes enviar los datos mediante la opción del menú <em>Reportar pago</em></p>
                     <ul>
-                    <li class="my-0" v-for="instruccion in metodosPago[datosPago].instrucciones" :key="instruccion">
-                        {{ instruccion }}
-                    </li>
-                </ul>
-                    <a href="#" @click="$emit('volver-paso',2)" class="card-link">Editar</a>
+                        <li class="my-0" >Transferiencia</li>
+                        <li class="my-0" >Pago movil</li>
+                        <li class="my-0" >Zelle</li>
+                        <li class="my-0" >Transferecia de Banco en Panama</li>
+                        <li class="my-0" >Punto de venta en tienda</li>
+                    </ul>
                 </div>
             </div>
         </div>

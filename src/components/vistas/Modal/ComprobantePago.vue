@@ -9,10 +9,10 @@
                 </div>
                 <div class="modal-body">
                     <!-- Formulario aquí -->
-                    <form @submit.prevent="submitForm">
+                    <form @submit.prevent="submitForm" id="formComprobante">
                         <div class="mb-3">
                             <label for="tipoPago" class="form-label">Tipo de Pago</label>
-                            <select class="form-select" id="tipoPago" v-model="selectedPayment" required>
+                            <select class="form-control" id="tipoPago" v-model="selectedPayment" required>
                                 <option value="" disabled>Seleccionar...</option>
                                 <option value="transferencia">Transferencia o Pago Móvil</option>
                                 <option value="zelle">Zelle</option>
@@ -49,7 +49,14 @@
                                 required>
                         </div>
 
-                        <button type="submit" :disabled="enviando " class="btn btn-primary"><i class="bi bi-send"></i> Enviar</button>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Captura de pantalla</label>
+                            <input class="form-control" type="file" accept="image/*" id="formFile"
+                                @change="handleFileChange" required>
+                        </div>
+
+                        <button type="submit" :disabled="enviando" class="btn btn-primary"><i class="bi bi-send"></i>
+                            Enviar</button>
                     </form>
                 </div>
             </div>
@@ -73,10 +80,17 @@
 </template>
   
 <script setup>
-import { ref, reactive, onMounted , watchEffect} from 'vue';
+import { ref, reactive, onMounted, watchEffect } from 'vue';
 import { postData } from '@/js/web/fetcher';
 import Auth from '@/js/firebase/AuthHelper';
 import { Modal } from 'bootstrap';
+
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+const toastConfig = { autoClose: 5000, position: toast.POSITION.TOP_CENTER };
+
+
 const auth = Auth.get();
 
 const enviando = ref(false);
@@ -113,23 +127,24 @@ const openModal = (asunto, cuerpo) =>
 
 onMounted(() =>
 {
-    
+
     selectedPayment.value = '';
     numReferencia.value = '';
     fechaTransferencia.value = '';
     montoTransferencia.value = '';
     correoZelle.value = '';
     numRecibo.value = '';
-    watchEffect(()=>{
-    valido.value =isValid();
-    console.log("isValid()",isValid())
-})
+    watchEffect(() =>
+    {
+        valido.value = isValid();
+        console.log("isValid()", isValid())
+    })
 })
 const closeModal = () =>
 {
     // Cerrar el modal
-     const modal = new Modal("#form-pago");
-     modal.hide();
+    const modal = new Modal("#form-pago");
+    modal.hide();
 };
 
 const submitForm = () =>
@@ -139,19 +154,43 @@ const submitForm = () =>
     {
         // Llamar a tu función AJAX para enviar los datos
         sendDataToServer();
-        enviando.value=true;
+        enviando.value = true;
     } else
     {
         // Mostrar un mensaje de error o realizar otras acciones si los datos no son válidos
         console.log('Datos inválidos');
+        toast.error("El fomulario no esta completo. ¿Cargaste el comprobante?", toastConfig);
+
     }
+};
+
+
+const selectedFile = ref(null);
+/**
+ * 
+ * @param {InputEvent} event 
+ */
+const handleFileChange = (event) =>
+{
+    const file = event.target.files[0];
+    //MB  Kb     bytes
+    if (file)
+    {
+
+        if (file.size < 4 * 1000 * 1000)
+            selectedFile.value = file;
+        else
+            toast.warn("Solo puedes enviar imagenes de 4Mb o menos")
+    }
+    else
+        toast.warn("Debes cargar una captura de pantalla")
 };
 
 const isValid = () =>
 {
     // Agregar lógica de validación aquí
     // Verificar que los campos requeridos estén completos
-    return selectedPayment.value.startsWith('transferencia') ?
+    return (selectedFile.value) && selectedPayment.value.startsWith('transferencia') ?
         ((numReferencia.value !== "") && (fechaTransferencia.value !== "") && (montoTransferencia.value !== "") && (numRecibo.value !== "")) :
         (correoZelle.value !== "")
     // Agregar otras condiciones de validación según tus requisitos
@@ -161,33 +200,46 @@ const sendDataToServer = async () =>
 {
 
     console.log('Datos enviados al servidor', selectedPayment.value, numReferencia.value, fechaTransferencia.value, montoTransferencia.value, correoZelle.value, numRecibo.value);
-    postData("api/sendVaucher", {
-        selectedPayment: selectedPayment.value,
-        numReferencia: numReferencia.value,
-        fechaTransferencia: fechaTransferencia.value,
-        montoTransferencia: montoTransferencia.value,
-        correoZelle: correoZelle.value,
-        numRecibo: numRecibo.value,
-        userTokenId: await auth.currentUser.getIdToken()
-    })
-        .then(ok => {
-            console.log("ok", ok);
-            closeModal()
-            alert("Se ha enviado el comprobante a ELEVAPUERTAS. Tambien recibiras una copia del comprobante.")
-            
-            selectedPayment.value="";
-            numReferencia.value="";
-            fechaTransferencia.value="";
-            montoTransferencia.value="";
-            correoZelle.value="";
-            numRecibo.value="";
+    // let form = new FormData(document.getElementById("formComprobante"));
+    let tokenUser = await auth.currentUser.getIdToken()
+    let form = new FormData();
+    form.append("selectedPayment", selectedPayment.value,);
+    form.append("numReferencia", numReferencia.value,);
+    form.append("fechaTransferencia", fechaTransferencia.value,);
+    form.append("montoTransferencia", montoTransferencia.value,);
+    form.append("correoZelle", correoZelle.value,);
+    form.append("numRecibo", numRecibo.value,);
+    form.set("comprobante", selectedFile.value,);
+    form.append("userTokenId", tokenUser );
+    postData("api/sendVaucher", form)
+        .then(ok =>
+        {
+            if (ok.error != undefined) {
+                toast.error(ok.error.razon, toastConfig);
+            } else {
+                console.log("ok", ok);
+                closeModal()
+                // alert("Se ha enviado el comprobante a ELEVAPUERTAS. Tambien recibiras una copia del comprobante.")
+                toast.success("Se ha enviado el comprobante a ELEVAPUERTAS. Tambien recibiras una copia del comprobante. ", toastConfig);
+
+                selectedPayment.value = "";
+                numReferencia.value = "";
+                fechaTransferencia.value = "";
+                montoTransferencia.value = "";
+                correoZelle.value = "";
+                numRecibo.value = "";
+            }
         })
-        .catch(ko => {
+        .catch(ko =>
+        {
             console.log("ko", ko);
-            alert("Ocurrio un problema. Si persiste el problema, puedes enviar los datos por WhatsApp o  Correo")
+            toast.error("Ocurrio un problema. Si persiste el problema, puedes enviar los datos por WhatsApp o  Correo", toastConfig);
+            // alert("Ocurrio un problema. Si persiste el problema, puedes enviar los datos por WhatsApp o  Correo")
+
         })
-        .finally(()=> {
-            enviando.value=false
+        .finally(() =>
+        {
+            enviando.value = false
         })
 
 };

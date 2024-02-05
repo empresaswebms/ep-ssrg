@@ -1,21 +1,3 @@
-<template>
-  <!-- eslint-disable -->
-
-  <NavBar> </NavBar>
-  <router-view :ref="vistaPagina" @view-mounted="paginaBusquedaLoaded" @agregar-producto="agregarProducto"
-    @comprar-producto="comprarProducto" @consultar-producto="consultarProducto" />
-  <pie-pagina></pie-pagina>
-  <div id="ftco-loader" class="show fullscreen">
-    <svg class="circular" width="48px" height="48px">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
-    </svg>
-  </div>
-  <modal-carrito :items="itemsCarrito" :monto="montoCarrito" :cantidad="cantidadCarrito" 
-  @pagar-carrito="pagarCarrito"
-    @eliminar-prod="eliminarProducto" />
-    <modal-pago></modal-pago>
-</template>
 
 <script setup>
 
@@ -25,7 +7,7 @@ import NavBar from "@/components/vistas/items/navbar/NavBar.vue"
 import PiePagina from "@/components/vistas/PiePagina.vue"
 import ModalCarrito from '@/components/vistas/ModalCarrito.vue';
 import ModalPago from '@/components/vistas/Modal/ComprobantePago.vue';
-import { loadModal, loadResultsProduct, addProduct, deleteProduct } from "@/js/CartApp/CartPlugin"; // Importa las funciones directamente desde el módulo del plugin
+import { loadModal, loadResultsProduct, addProduct, deleteProduct, } from "@/js/CartApp/CartPlugin"; // Importa las funciones directamente desde el módulo del plugin
 import { useRouter } from 'vue-router';
 import { scrollToElement } from './js/views/animate';
 
@@ -50,14 +32,14 @@ function paginaBusquedaLoaded(element) {
     loadResultsProduct(element.value);
 }
 
-function agregarProducto(producto) {
+function agregarProducto(producto,cantidad) {
   // CartApp.addProduct(producto);
-  addProduct(producto);
+  addProduct(producto,cantidad);
 }
 
-function comprarProducto(producto) {
+function comprarProducto(producto,cantidad) {
   // CartApp.addProduct(producto);
-  addProduct(producto);
+  addProduct(producto,cantidad);
   router.push("/comprar")
 }
 
@@ -78,6 +60,30 @@ function pagarCarrito() {
 <style lang="scss">
 @import "assets/scss/style.scss";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+// Default theme
+@import '@splidejs/vue-splide/css';
+
 
 #app {}
 </style>
+
+<template>
+  <!-- eslint-disable -->
+
+  <NavBar> </NavBar>
+  <span id="ancla"></span>
+  <router-view :ref="vistaPagina" @view-mounted="paginaBusquedaLoaded" @agregar-producto="agregarProducto"
+    @comprar-producto="comprarProducto" @consultar-producto="consultarProducto" />
+  <pie-pagina></pie-pagina>
+  <div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+    </svg>
+  </div>
+  <modal-carrito :items="itemsCarrito" :monto="montoCarrito" :cantidad="cantidadCarrito" 
+  @pagar-carrito="pagarCarrito"
+    @eliminar-prod="eliminarProducto" />
+    <modal-pago></modal-pago>
+    
+</template>

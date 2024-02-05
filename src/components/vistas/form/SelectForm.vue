@@ -1,17 +1,12 @@
 <template>
     <div class="mb-3">
         <label for="#">{{ titulo }}</label>
-        <div class="form-field">
-            <div class="select-wrap">
-                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                <select name="" id="select-marcas" class="form-control" @change="itemChange($event)">
+            <select class="form-control form-select-lg mb-3" :name="titulo"  @change="itemChange($event)">
                     <option v-if="placeholder" value="">{{ placeholder }}</option>
                     <option v-for="opcion in opciones" :key="opcion" :value="valor(opcion)">
                         {{ texto(opcion) }}
                     </option>
                 </select>
-            </div>
-        </div>
     </div>
 </template>
 
